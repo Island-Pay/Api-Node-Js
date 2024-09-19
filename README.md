@@ -154,7 +154,7 @@ try{
 
 ### Register 2 verify Email send otp (GET) -- /verify/email/1?email=joe@doe.com
 
-> This is the route to swnd otp to verify email.
+> This is the route to send otp to verify email.
 
 **Query**
 
@@ -175,4 +175,37 @@ try{
   }
 ```
 
----# Api-Node-Js
+---
+
+### Register 2 verify Email otp (GET) -- /verify/email/1?email=joe@doe.com
+
+> This is the route to send otp to verify email.
+
+**Query**
+
+```
+  {
+    email: string
+  }
+```
+
+**Inputs**
+
+```
+  {
+    otp:String
+  }
+```
+
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    Verified:true/null
+  }
+```
+
+---

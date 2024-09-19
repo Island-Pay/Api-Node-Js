@@ -321,5 +321,164 @@ router.get('/verify/email/1',async (req, res) => {
     }
 })
 
+router.post('/verify/email/1',async (req, res) => {
+    try {
+
+        //getEmail
+        let userEmail= req.query.email
+
+        //get otp
+        const {otp}= req.body
+
+        //check user
+        let User = await UserModel.findOne({email:userEmail,email_verif:false})
+
+        if(!User) return res.status(404).json({Access:true,Error:"You dont have access to verify",})
+
+        // get otp
+        let Verif= await userVerifModel.findOne({user_id:User._id})
+
+        //check otp
+        if(Verif.otp!=otp) return res.status(404).json({Access:true,Error:"Invalid OTP",})
+        
+        await UserModel.updateOne({email:userEmail},{email_verif:true})
+
+        res.json({Access:true,Error:false, Verified:true})
+        
+        await Sendmail(User.email,'Email verified',`
+        <!DOCTYPE html>
+        <html lang="en">
+        
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Email Verified - Island Pay</title>
+            <style>
+                body {
+                    margin: 0;
+                    padding: 0;
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f9;
+                }
+        
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+        
+                .header {
+                    background-color: #6a1b9a;
+                    color: #fff;
+                    padding: 20px;
+                    text-align: center;
+                }
+        
+                .header h1 {
+                    margin: 0;
+                    font-size: 24px;
+                }
+        
+                .content {
+                    padding: 20px;
+                    color: #333;
+                }
+        
+                .content h2 {
+                    font-size: 22px;
+                    color: #6a1b9a;
+                    margin-top: 0;
+                }
+        
+                .content p {
+                    font-size: 16px;
+                    line-height: 1.6;
+                    margin-bottom: 20px;
+                }
+        
+                .button {
+                    display: inline-block;
+                    padding: 12px 25px;
+                    background-color: #6a1b9a;
+                    color: #fff;
+                    text-decoration: none;
+                    border-radius: 5px;
+                    font-size: 16px;
+                }
+        
+                .footer {
+                    background-color: #f4f4f9;
+                    color: #999;
+                    padding: 10px;
+                    text-align: center;
+                    font-size: 14px;
+                }
+        
+                @media (max-width: 600px) {
+                    .container {
+                        width: 100%;
+                        padding: 0;
+                    }
+        
+                    .content h2 {
+                        font-size: 20px;
+                    }
+        
+                    .content p {
+                        font-size: 14px;
+                    }
+        
+                    .button {
+                        font-size: 14px;
+                    }
+                }
+            </style>
+        </head>
+        
+        <body>
+            <div class="container">
+                <!-- Header -->
+                <div class="header">
+                    <h1>Email Successfully Verified</h1>
+                </div>
+        
+                <!-- Main Content -->
+                <div class="content">
+                    
+                    <p>
+                        Congratulations! Your email address has been successfully verified, and your Island Pay account is now active.
+                    </p>
+                    <p>
+                        You can now start using Island Pay to manage your payments and transactions with ease. Click the button below to get started:
+                    </p>
+                    <p style="text-align:center;">
+                        <a href="https://yourappurl.com" class="button">Get Started</a>
+                    </p>
+                    <p>
+                        If you have any questions or need support, feel free to contact us at <a href="mailto:support@islandpay.com">support@islandpay.com</a>.
+                    </p>
+                </div>
+        
+                <!-- Footer -->
+                <div class="footer">
+                    <p>&copy; 2024 Island Pay. All Rights Reserved.</p>
+                </div>
+            </div>
+        </body>
+        
+        </html>
+        
+        
+            `)
+    } catch (error) {
+        res.status(400).json({
+            Access:true,
+            Error:Errordisplay(error).msg
+        })
+    }
+})
 
 module.exports=router
