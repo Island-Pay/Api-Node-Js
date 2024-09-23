@@ -58,10 +58,18 @@ async function SendSMS(to, text){
 
     return{sent:true}
     
-  } catch (error) {
-    console.log(error.response.data);
 
-    return {Error:error.response.data.data.message}
+  //catch (error) {
+  //   console.log(error.response.data);
+
+  //   return {Error:error.response.data.data.message}
+  // }
+} catch (error) {
+      // Safely extract the error message
+      const errorMessage = error.response?.data?.data?.message   // Use optional chaining
+      console.log(errorMessage);
+
+      return { Error: errorMessage };
   }
 }
 

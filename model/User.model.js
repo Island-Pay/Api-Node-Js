@@ -27,7 +27,7 @@ const UserSchema = new Schema({
         required:[true, "email is required"],
         match:[/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "not a valid email address"]
     },
-    mobileNo:{
+    phone_number:{
         type: Number,
         unique:true,
         required: [true,"Mobile number is required"]
@@ -40,11 +40,15 @@ const UserSchema = new Schema({
         type: String,
         required: [true, "password is invalid"]
     },
+    userDetails_verify:{
+        type: Boolean,
+        default:false
+    },
     email_verif:{
         type: Boolean,
         default:false
     },
-    mobile_number_verif:{
+    phone_number_verif:{
         type: Boolean,
         default:false
     },

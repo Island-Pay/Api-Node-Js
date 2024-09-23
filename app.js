@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3001
 
 //body parser
 app.use(require('body-parser').urlencoded({extended:true,limit:"50mb"}))
@@ -49,4 +49,5 @@ mongoose.connect(process.env.mongoUri)
   ////////////Routes///////////////////
 
   //////////////Auth///////////////
-  app.use('/register',require('./router/Auths/Register'))//register routes
+app.use('/register',require('./router/Auths/Register'))//register routes
+app.use('/login',require('./router/Auths/Logins'))//Login routes

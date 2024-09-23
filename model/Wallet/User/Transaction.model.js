@@ -6,38 +6,38 @@ const Transactions_Model = new mongoose.Schema({
         required: [true,"userId is damn required"]
     },
 
-    Amount: {
+    amount: {
         type: Number,
         required: [true,"Amount is required"],
         min:[1,"Amount is too small"]
     },
-    Charges: {
+    charges: {
         type: Number,
         required: [true,"Charges is required"],
         default:0
     },
 
-    Type: {
+    type: {
         type: String,
         required: [true,"Type is required"],
         enum:["Debit","Credit","Admin"]
     },
 
-    Naration: {
+    naration: {
         type: String,
         required: [true,"Naration is required"],
     },
-    From: {
+    from: {
         type: String,
         required: [true,"From is required"],
         enum:["NGN","USD","KES","ZAR","GHS","XOF","XAF","GBP","CASH"]
     },
-    To: {
+    to: {
         type: String,
         required: [true,"To is required"],
         enum:["NGN","USD","KES","ZAR","GHS","XOF","XAF","GBP","CASH"]
     },
-    Process: {
+    process: {
         type: String,
         required: [true,"Process is required"],
         enum:["Successfull","Failed","Pending"]

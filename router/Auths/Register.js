@@ -1,9 +1,10 @@
 const UserModel = require('../../model/User.model')
 const { Errordisplay } = require('../../utils/Auth.utils')
 const bcrypt= require('bcryptjs')
-const { Sendmail } = require('../../utils/mailer.utils')
+const { Sendmail, SendSMS } = require('../../utils/mailer.utils')
 const { GenOTP } = require('../../utils/random.utils')
 const userVerifModel = require('../../model/userVerif.model')
+const userDetailsModel = require('../../model/userDetails.model')
 const router= require('express').Router()
 
 
@@ -16,6 +17,9 @@ router.post('/1',async (req, res) => {
         //hash password
         const hashPwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(Collect.password)?await bcrypt.hashSync(Collect.password, 10):null
         Collect.password=hashPwd
+
+        // if not nigerian verify id
+        if(Country!="Nigeria")Collect.bank_verif==true;
 
         let User = await UserModel.create(Collect)
 
@@ -152,6 +156,7 @@ router.post('/1',async (req, res) => {
         })
     }
 })
+
 
 router.get('/verify/email/1',async (req, res) => {
     try {
@@ -321,7 +326,7 @@ router.get('/verify/email/1',async (req, res) => {
     }
 })
 
-router.post('/verify/email/1',async (req, res) => {
+router.post('/verify/email/1', async (req, res) => {
     try {
 
         //getEmail
@@ -481,4 +486,117 @@ router.post('/verify/email/1',async (req, res) => {
     }
 })
 
+router.get('/verify/phoneNumber/1', async (req, res) => {
+    try {
+        
+        let userPhoneNo= req.query.phone_number
+
+        let User = await UserModel.findOne({phone_number:userPhoneNo})
+
+        if(!User) return res.status(404).json({Access:false,Error:"Phone number not found",})
+
+               //create otp
+        let OTP= GenOTP()
+        await userVerifModel.create({
+            user_id:User._id,
+            otp:OTP,
+        })
+
+         // Sending OTP via SMS
+         const smsResult = await SendSMS(User.phone_number,` Your IslandPay Phone Number Verification OTP is: ${OTP}. Expires in the next 10 minutes.`);
+
+         if (smsResult.sent) {
+             return res.status(200).json({
+                 Access: true,
+                 Error:false,
+                 Sent: true
+             });
+         } else {
+             return res.status(500).json({
+                 Access: false,
+                 Error: smsResult.Error
+             });
+         }
+
+    } catch (error) {
+
+        res.status(400).json({
+            Access:false,
+            Error:Errordisplay(error).msg
+        })
+    }
+})
+
+router.post('/verify/phoneNumber/1', async (req, res) => {
+    try {
+        const { userPhoneNo, OTP } = req.body;  
+
+        // Find the user by phone number
+        const User = await UserModel.findOne({ phone_number: userPhoneNo });
+        
+        if (!User) {
+            return res.status(404).json({
+                Access: false,
+                Error: "User not found with this phone number"
+            });
+        }
+
+        // Finding the OTP entry from the userVerifModel
+        const verifRecord = await userVerifModel.findOne({
+            user_id: User._id,
+            otp: OTP
+        });
+
+        if (verifRecord.otp !== OTP) {
+            return res.status(400).json({
+                Access: false,
+                Error: "Invalid OTP"
+            });
+        }
+
+        // If OTP is valid, update the user's mobile_number_verif to true
+        User.phone_number_verif = true;
+        await User.save();
+
+        // delete the verification record after successful verification
+        await userVerifModel.deleteOne({ _id: verifRecord._id });
+
+        return res.status(200).json({
+            Access: true,
+            Error: false,
+            Message: "Phone number verified successfully"
+        });
+
+    } catch (error) {
+        return res.status(400).json({
+            Access: false,
+            Error: error.message
+        });
+    }
+});
+
+router.post('/userdetails',async (req, res) => {
+    try {
+
+        //user input
+        let Collect= req.body
+
+        let userEmail= req.query.email
+
+        let User = await UserModel.findOne({email:userEmail, userDetails_verify:false})
+
+        if(!User) return res.status(404).json({Access:true,Error:"User not found",})
+
+        Collect.user_id=User._id
+
+        await userDetailsModel.create(Collect)
+
+        res.json({Access:true,Error:false, Data:Collect})
+    } catch (error) {
+        res.status(400).json({
+            Access:true,
+            Error:Errordisplay(error).msg
+        })
+    }
+})
 module.exports=router

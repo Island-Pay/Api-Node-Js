@@ -177,7 +177,7 @@ try{
 
 ---
 
-### Register 2 verify Email otp (GET) -- /verify/email/1?email=joe@doe.com
+### Register 2 verify Email otp (POST) -- /verify/email/1?email=joe@doe.com
 
 > This is the route to send otp to verify email.
 
@@ -205,6 +205,124 @@ try{
     "Access": true,
     "Error": false/Error,
     Verified:true/null
+  }
+```
+
+---
+
+### Register 3 verify Phone Number send otp (GET) -- /verify/phoneNumber/1?phone_number=2348133092341
+
+> This is the route to send otp to verify email.
+
+**Query**
+
+```
+  {
+    phone_number: number
+  }
+```
+
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    Sent:true/null
+  }
+```
+
+---
+
+### Register 3 verify Phone Number otp (POST) -- /verify/Phone Number/1
+> This is the route to send otp to verify Phone Number.
+
+
+**Inputs**
+
+```
+  {
+    userPhoneNo:Number
+    OTP:String
+  }
+```
+
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Message": "Phone number verified successfully"
+  }
+```
+
+---
+
+### Login (POST) -- /login
+
+> This is the first route for register, you perform this before any.
+
+**Inputs**
+
+```
+  {
+    email: string,
+    password: string,
+  }
+```
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Data": {
+        "LoginSteps":{
+          "step1": boolean,
+          "emailVerify": boolean,
+          "phoneNoVerify": boolean,
+          "UserDetails": boolean
+        },
+
+        "BasicVerification":Boolean,
+        "BasicVerificationDetails":{
+          Email: boolean,
+          Phone: boolean
+        },
+
+        "KYCVerification":boolean,
+        "KYCVerificationDetails":{
+          "Bank": boolean,
+          "ID": boolean
+        },
+
+        "Email": string,
+        "PhoneNumber": string,
+
+        "UserDetails":null/{
+          "User":{
+            "firstName": string,
+            "lastName": string,
+            "username": string,
+            "email": string,
+            "phone_number": number,
+            "country": string,
+            "Referral": string
+          },
+          "Details":{
+            'dateOfBirth': NativeDate,
+            'address': string,
+            'city': string,
+            'state': string,
+            'country': string,
+            'zipCode': string
+          }
+        }
+    }
   }
 ```
 
