@@ -37,7 +37,7 @@
 ```
   {
     ...
-    authorization:auth
+    Authorization:'Bearer auth'
   }
 ```
 
@@ -110,10 +110,12 @@ try{
   {
     firstName: string,
     lastName: string,
+    middleName: string,
     username: string,
     email: string,
-    mobileNo: number,
+    phone_number: number,
     country: string,
+    password: string
   }
 ```
 
@@ -152,7 +154,7 @@ try{
 
 ---
 
-### Register 2 verify Email send otp (GET) -- /verify/email/1?email=joe@doe.com
+### Register 2 verify Email send otp (GET) -- /register/verify/email/1?email=joe@doe.com
 
 > This is the route to send otp to verify email.
 
@@ -177,7 +179,7 @@ try{
 
 ---
 
-### Register 2 verify Email otp (POST) -- /verify/email/1?email=joe@doe.com
+### Register 2 verify Email otp (POST) -- /register/verify/email/1?email=joe@doe.com
 
 > This is the route to send otp to verify email.
 
@@ -210,7 +212,7 @@ try{
 
 ---
 
-### Register 3 verify Phone Number send otp (GET) -- /verify/phoneNumber/1?phone_number=2348133092341
+### Register 3 verify Phone Number send otp (GET) -- /register/verify/phoneNumber/1?phone_number=2348133092341
 
 > This is the route to send otp to verify email.
 
@@ -235,7 +237,7 @@ try{
 
 ---
 
-### Register 3 verify Phone Number otp (POST) -- /verify/Phone Number/1
+### Register 3 verify Phone Number otp (POST) -- /register/verify/phoneNumber/1
 > This is the route to send otp to verify Phone Number.
 
 
@@ -261,9 +263,55 @@ try{
 
 ---
 
+### Register 4 userdetails (POST) -- /register/userdetails?email=joe@doe.com
+
+> This is the route to register user details
+
+**Query**
+
+```
+  {
+    email: string
+  }
+```
+
+
+**Inputs**
+
+```
+  {
+    'dateOfBirth': NativeDate,
+    'address': string,
+    'city': string,
+    'state': string,
+    'country': string,
+    'zipCode': string
+  }
+```
+
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Data": {
+      'dateOfBirth': NativeDate,
+      'address': string,
+      'city': string,
+      'state': string,
+      'country': string,
+      'zipCode': string
+    }
+  }
+```
+
+---
+
 ### Login (POST) -- /login
 
-> This is the first route for register, you perform this before any.
+> This is the route to login
 
 **Inputs**
 
@@ -321,9 +369,51 @@ try{
             'country': string,
             'zipCode': string
           }
-        }
+        },
+        Auth: null/String
     }
   }
+```
+---
+
+### ForgotPassword (POST) ~ /forgotpassword/1
+> This is the route to send otp for forget password
+
+**Input**
+```
+{
+  "email":String,         
+}
+```
+
+**output**
+```
+
+  {
+    "Access": true,
+    "Error:false/Error,
+    "Message": "OTP sent to your email successfully."
+  }
+```
+
+### ForgotPassword (POST) ~ /forgotpassword/2
+> Route for verifying of OTP and reset password of user
+ 
+**Input**
+```
+{
+  "email":String,
+  "otp": Number,
+  "password":String      
+}
+```
+
+**Output**
+```
+{
+  "Access": true,
+  "Message": "Password reset successfully."
+}
 ```
 
 ---

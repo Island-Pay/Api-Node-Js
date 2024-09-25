@@ -1,5 +1,5 @@
 const UserModel = require('../../model/User.model')
-const { Errordisplay } = require('../../utils/Auth.utils')
+const { Errordisplay,CreateJWTToken } = require('../../utils/Auth.utils')
 const bcrypt= require('bcryptjs')
 const { Sendmail } = require('../../utils/mailer.utils')
 const { GenOTP } = require('../../utils/random.utils')
@@ -23,14 +23,25 @@ router.post('/',async (req, res) => {
             Access:true,
             Error:'User not found'
         })
+        if (User.Blocked==true) return res.status(403).json({
+            Access:true,
+            Error:'User is blocked'
+        })
 
         let checkPassword= bcryptjs.compareSync(Collect.password, User.password)
 
         //validate
-        if (checkPassword==true) return res.status(400).json({
+        if (checkPassword==false) return res.status(400).json({
             Access:true,
             Error:'User not found'
         })
+
+        let Auth=null
+        if(User.email_verif==true&&User.phone_number_verif&&User.userDetails_verify){
+            Auth= await CreateJWTToken(User)
+        }
+
+
 
         res.json({Access:true,Error:false, Data:{
 
@@ -60,7 +71,8 @@ router.post('/',async (req, res) => {
                     User,
                     Details:await userDetailsModel.findOne({user_id:User._id})
                 },
-            }:{}
+            }:{},
+            Auth
 
         }})
 

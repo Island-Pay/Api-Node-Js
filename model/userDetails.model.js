@@ -8,9 +8,11 @@ const UserDetailsSchema = new mongoose.Schema({
     },
     profile_photo: {
         type: String,  // to store the image URL or a file path
+        default:'none'
     },
     profile_photoPublicID:{
         type: String,  // to store the image URL or a file path
+        default:'none'
     },
     dateOfBirth: {
         type: Date,

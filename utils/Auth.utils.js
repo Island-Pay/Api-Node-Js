@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../model/User.model");
-// const AuthModel = require("../models/Auth.model");
+const AuthModel = require("../model/Auth.model");
 
 const crypto = require('crypto');
 
@@ -39,7 +39,7 @@ async function CreateJWTToken(payload) {
         await AuthModel.create({
           UserID:payload._id,
           Auth:token,
-          UserName:payload.Username
+          UserName:payload.username
         })
         return token
       } catch (error) {

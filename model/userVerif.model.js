@@ -5,7 +5,9 @@ const Schema = mongoose.Schema;
 const UserVerifSchema = new Schema({
 
     user_id:{
-        type:String
+        type:String,
+        required:true,
+        unique:true
     },
     otp:{
         type: Number,

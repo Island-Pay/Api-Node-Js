@@ -19,7 +19,7 @@ router.post('/1',async (req, res) => {
         Collect.password=hashPwd
 
         // if not nigerian verify id
-        if(Country!="Nigeria")Collect.bank_verif==true;
+        if(Collect.country!="Nigeria")Collect.bank_verif==true;
 
         let User = await UserModel.create(Collect)
 
@@ -495,7 +495,7 @@ router.get('/verify/phoneNumber/1', async (req, res) => {
 
         if(!User) return res.status(404).json({Access:false,Error:"Phone number not found",})
 
-               //create otp
+        //create otp
         let OTP= GenOTP()
         await userVerifModel.create({
             user_id:User._id,
@@ -505,6 +505,7 @@ router.get('/verify/phoneNumber/1', async (req, res) => {
          // Sending OTP via SMS
          const smsResult = await SendSMS(User.phone_number,` Your IslandPay Phone Number Verification OTP is: ${OTP}. Expires in the next 10 minutes.`);
 
+         console.log(smsResult);
          if (smsResult.sent) {
              return res.status(200).json({
                  Access: true,
@@ -513,7 +514,7 @@ router.get('/verify/phoneNumber/1', async (req, res) => {
              });
          } else {
              return res.status(500).json({
-                 Access: false,
+                 Access: true,
                  Error: smsResult.Error
              });
          }
@@ -590,6 +591,8 @@ router.post('/userdetails',async (req, res) => {
         Collect.user_id=User._id
 
         await userDetailsModel.create(Collect)
+
+        await UserModel.updateOne({email:userEmail},{userDetails_verify:true})
 
         res.json({Access:true,Error:false, Data:Collect})
     } catch (error) {

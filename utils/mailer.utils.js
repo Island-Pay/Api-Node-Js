@@ -52,7 +52,7 @@ async function SendSMS(to, text){
         to,
         body:text,
         api_token:process.env.bulkSMSApiKey,
-        gateway:'international'
+        gateway:'direct-refund'
       })
     })
 
@@ -65,8 +65,9 @@ async function SendSMS(to, text){
   //   return {Error:error.response.data.data.message}
   // }
 } catch (error) {
+  console.log(error.response.data);
       // Safely extract the error message
-      const errorMessage = error.response?.data?.data?.message   // Use optional chaining
+      const errorMessage = error.response?.data?.error?.message   // Use optional chaining
       console.log(errorMessage);
 
       return { Error: errorMessage };

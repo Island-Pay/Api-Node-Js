@@ -71,6 +71,10 @@ const UserSchema = new Schema({
     Referral:{
         type:String,
     },
+    Blocked:{
+        type:Boolean,
+        default:false
+    }
 }, {timestamps: true})
 
 
