@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const AdminTransactionSchema = new mongoose.Schema({
-    admin_id: {
+    user_id: {
         type: String,
         required: true
     },
@@ -16,7 +16,8 @@ const AdminTransactionSchema = new mongoose.Schema({
     },
     currency: {
         type: String,
-        required: true
+        required: true,
+        enum:["NGN","USD","KES","ZAR","GHS","XOF","XAF","GBP","CASH"]
     },
     description: {
         type: String

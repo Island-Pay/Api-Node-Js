@@ -31,7 +31,8 @@ router.post('/',VerifyJWTToken,async (req, res) => {
             url:`${process.env.KoraApiLink}`,
             headers:{
                 Accept:'application/json',
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                Authorization:`Bearer `
             },
             data:JSON.stringify({
                 id:Collect.id,

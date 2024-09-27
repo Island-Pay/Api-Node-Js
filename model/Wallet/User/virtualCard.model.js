@@ -29,7 +29,8 @@ const VirtualCardSchema = new mongoose.Schema({
     },
     currency: {
         type: String,
-        required: true
+        required: true,
+        enum:['NGN',"USD"]
     },
     status: {
         type: String,

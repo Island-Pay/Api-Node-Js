@@ -1,21 +1,20 @@
 const mongoose = require('mongoose');
 
 const AdminBalanceSchema = new mongoose.Schema({
-    admin_id:{
-        type: String,
-        required:true
-    },
     total_balance: {
         type: Number,
-        required: true
+        required: true,
+        default:0
     },
     available_balance: {
         type: Number,
-        required: true
+        required: true,
+        default:0
     },
-    currency: {
-        type: String,
-        required: true
+    SystemBalance: {
+        type: Number,
+        required: true,
+        default:0
     }
 }, { timestamps: true });
 

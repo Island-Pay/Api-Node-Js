@@ -395,6 +395,7 @@ try{
     "Message": "OTP sent to your email successfully."
   }
 ```
+---
 
 ### ForgotPassword (POST) ~ /forgotpassword/2
 > Route for verifying of OTP and reset password of user
@@ -414,6 +415,46 @@ try{
   "Access": true,
   "Message": "Password reset successfully."
 }
+```
+
+---
+
+
+## Deposit 
+
+> This is where all auth route like login, register and all
+
+---
+
+### Get deposit link (POST) -- /deposit?currency=NGN
+
+> This is the route to get deposit link.
+
+**Query**
+
+```
+  {
+    currency: "NGN" | "KES" | "GHS" | "USD"
+  }
+```
+>This is the customer desire currency to deposit in.
+
+**Inputs**
+
+```
+  {
+    amount:Number
+  }
+```
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "RedirectURl": String
+  }
 ```
 
 ---

@@ -5,6 +5,7 @@ const { Sendmail, SendSMS } = require('../../utils/mailer.utils')
 const { GenOTP } = require('../../utils/random.utils')
 const userVerifModel = require('../../model/userVerif.model')
 const userDetailsModel = require('../../model/userDetails.model')
+const UserWalletModel = require('../../model/Wallet/User/UserWallet.model')
 const router= require('express').Router()
 
 
@@ -22,6 +23,9 @@ router.post('/1',async (req, res) => {
         if(Collect.country!="Nigeria")Collect.bank_verif==true;
 
         let User = await UserModel.create(Collect)
+
+        //create wallet
+        await UserWalletModel.create({user_id:User._id})
 
         res.json({Access:true,Error:false, Data:User})
 
@@ -591,6 +595,8 @@ router.post('/userdetails',async (req, res) => {
         Collect.user_id=User._id
 
         await userDetailsModel.create(Collect)
+
+        
 
         await UserModel.updateOne({email:userEmail},{userDetails_verify:true})
 
