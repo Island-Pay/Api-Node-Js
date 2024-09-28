@@ -2,7 +2,7 @@ const UserModel = require('../../model/User.model')
 const { Errordisplay,CreateJWTToken, VerifyJWTToken } = require('../../utils/Auth.utils')
 const bcrypt= require('bcryptjs')
 const { Sendmail } = require('../../utils/mailer.utils')
-const { GenOTP } = require('../../utils/random.utils')
+const { GenOTP, percentagePrice } = require('../../utils/random.utils')
 const userVerifModel = require('../../model/userVerif.model')
 const bcryptjs = require('bcryptjs')
 const { default: axios } = require('axios')
@@ -10,66 +10,30 @@ const TemporaryDepositModel = require('../../model/Wallet/User/TemporaryDeposit.
 const router= require('express').Router()
 
 
-router.get('/rate',VerifyJWTToken,async (req, res) => {
+router.get('/get-rate',VerifyJWTToken,async (req, res) => {
     try {
+        let {from,to}=req.query
 
-        let Sendingcurrency= req.query.sending_currency
-        let Recievingcurrency= req.query.recieving_currency
-
-        if (Sendingcurrency!='NGN'&&Sendingcurrency!='USD')return res.status(400).json({
+        const excludedCurrencies = ["NGN","USD","KES","ZAR","GHS","XOF","XAF","GBP"];
+        if (!excludedCurrencies.includes(from)) {
+            return res.status(400).json({
             Access:true,
-            Error:'Invalid sending currency.'
-        })
-        if (Recievingcurrency!='NGN'&&Recievingcurrency!='USD')return res.status(400).json({
+            Error:'Invalid base currency.'
+        }) }
+        if (!excludedCurrencies.includes(from)) {
+            return res.status(400).json({
             Access:true,
-            Error:'Invalid recieving currency.'
-        }) 
-        
-        //check if send and recieve the same
-        if (RecievingcurrencyRecievingcurrency)return res.status(400).json({
-            Access:true,
-            Error:'Cant have the same currency for sender and reciever.'
-        }) 
+            Error:'Invalid target currency.'
+        }) }
 
-        //get data
-        let amount= req.query.amount
-        // amount,narration
+        let rate = (await axios({
+            url:`https://v6.exchangerate-api.com/v6/${process.env.exchangerateKey}/pair/${from}/${to}/100`,
+            method:'get'
+        }))?.data.conversion_rate
 
-        //deleting old temporary deposit
-        await TemporaryDepositModel.deleteOne({user_id:req.user._id})
-        //save temporary deposit
-        let TempDeposit= await TemporaryDepositModel.create({
-            user_id:req.user._id,
-            amount,
-            currency
-        })
-        
-        //intigration
-        let intigration= await axios({
-            url:`${process.env.KoraApiLink}/api/v1/charges/initialize`,
-            method:'post',
-            headers:{
-                Accept:'application/json',
-                'Content-Type':'application/json',
-                Authorization:`Bearer ${process.env.KoraSecretKey}`
-            },
-            data:JSON.stringify({
-                amount,
-                currency,
-                reference:TempDeposit._id,
-                narration:`${currency} deposit ${req.user.username}`,
-                customer:{
-                    email:req.user.email,
-                    name:req.user.username
-                },
-                merchant_bears_cost:false
-            })
-        })
+        let earning= percentagePrice(rate,process.env.islandConversionEarining)
 
-        let data=intigration.data
-
-        res.json({Access:true, Error:false, RedirectURl:data.data.checkout_url})
-
+        res.json({Access:true,Error:false,Rate:rate-earning})
     } catch (error) {
         if (error.isAxiosError) {
             // Axios specific error handling

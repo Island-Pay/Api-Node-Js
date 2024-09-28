@@ -462,7 +462,7 @@ try{
 
 ## Send money 
 
-> This is where all auth route like login, register and all
+> This is where send money to
 
 ---
 
@@ -506,6 +506,40 @@ try{
       "process":String,
       "createdAt": NativeDate
     }
+  }
+```
+
+---
+
+## Convert money 
+
+> This is where you convert currencies
+
+---
+
+### get rate (GET) -- /convert/get-rate?from=USD&to=NGN
+> This is the route to get rate.
+
+**Query**
+
+```
+  {
+    from: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP",
+    to: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP"
+  }
+```
+>This is the customer desire currency to convert money from and to.
+
+
+>reciever: This is reciever username
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Rate": Number
   }
 ```
 

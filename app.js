@@ -58,3 +58,4 @@ app.use('/forgotpassword',require('./router/Auths/forgotPassword'))//Login route
 app.use('/deposit',require('./router/Wallet/Deposit'))//deposit routes
 app.use('/webhook',require('./router/Wallet/Webhook'))//webhook routes
 app.use('/sendmoney',require('./router/Wallet/SendMoneyInit'))//send money routes
+app.use('/convert',require('./router/Wallet/Convert'))//convert money routes
