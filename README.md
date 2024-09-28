@@ -544,3 +544,125 @@ try{
 ```
 
 ---
+
+### convert money (POST) -- /convert/convert
+> This is the route to convert the money.
+
+**Input**
+
+```
+  {
+    from: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP",
+    to: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP",
+    pin:String,
+    amount:Number
+  }
+```
+>This is the customer desire currency to convert money from and to.
+
+
+>reciever: This is reciever username
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Converted": true
+  }
+```
+
+---
+
+router.get('/',VerifyJWTToken,async (req, res) => {
+
+## Walet Details 
+
+> This is where you get wallet details
+
+---
+
+### get details (GET) -- /wallet/details
+> This is the route to get full wallet details.
+
+
+>reciever: This is reciever username
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Balance": {
+      Wallet:{
+        Ngn: number,
+        Usd: number,
+        Kes: number,
+        Zar: number,
+        Ghs: number,
+        Xof: number,
+        Xaf: number,
+        Gbp: number,
+      },
+      Transactions:[
+        {
+          "amount":Number,
+          "charges":Number,
+          "type":String,
+          "naration":String,
+          "from":String,
+          "to":String,
+          "process":String,
+          "createdAt": NativeDate
+        }
+      ],
+      virtualCard:[
+        {
+          card_number: string;
+          card_type: "Visa" | "MasterCard";
+          expiration_date: NativeDate;
+          cvv: number;
+          balance: number;
+          currency: "NGN" | "USD";
+          status: "active" | ... 1 more ... | "blocked";
+        }
+      ]
+    }
+  }
+```
+
+---
+
+### convert money (POST) -- /convert/convert
+> This is the route to convert the money.
+
+**Input**
+
+```
+  {
+    from: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP",
+    to: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP",
+    pin:String,
+    amount:Number
+  }
+```
+>This is the customer desire currency to convert money from and to.
+
+
+>reciever: This is reciever username
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Converted": true
+  }
+```
+
+---
+
+router.get('/',VerifyJWTToken,async (req, res) => {

@@ -32,18 +32,18 @@ app.use(require('express-session')({secret:process.env.sessionSecret, resave: tr
 let mongoose= require('mongoose')
 const UserModel = require('./model/User.model')
 const UserWalletModel = require('./model/Wallet/User/UserWallet.model')
+const adminBalanceModel = require('./model/Wallet/Admin/adminBalance.model')
 mongoose.set('strictQuery',true)
 mongoose.set('runValidators',true)
 mongoose.connect(process.env.mongoUri)
   .then(() => {
     console.log("db connected");
     app.listen(port, () => console.log(`http://localhost:${port}`))
+   
   })
   .catch((error) => {
     console.error("Error connecting to the database:", error);
   });
-
-
 
 
 
@@ -59,3 +59,4 @@ app.use('/deposit',require('./router/Wallet/Deposit'))//deposit routes
 app.use('/webhook',require('./router/Wallet/Webhook'))//webhook routes
 app.use('/sendmoney',require('./router/Wallet/SendMoneyInit'))//send money routes
 app.use('/convert',require('./router/Wallet/Convert'))//convert money routes
+app.use('/wallet/details',require('./router/Wallet/Details'))//wallet details money routes
