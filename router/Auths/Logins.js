@@ -37,7 +37,7 @@ router.post('/',async (req, res) => {
         })
 
         let Auth=null
-        if(User.email_verif==true&&User.phone_number_verif&&User.userDetails_verify){
+        if(User.email_verif==true&&User.phone_number_verif&&User.userDetails_verify&& User.pin!='null'){
             Auth= await CreateJWTToken(User)
         }
 
@@ -66,7 +66,7 @@ router.post('/',async (req, res) => {
 
             Email:User.email,
             PhoneNumber:User.phone_number,
-            ...User.email_verif==true&&User.phone_number_verif&&User.userDetails_verify?{
+            ...User.email_verif==true&&User.phone_number_verif&&User.userDetails_verify&& User.pin!='null'?{
                 UserDetails:{
                     User,
                     Details:await userDetailsModel.findOne({user_id:User._id})

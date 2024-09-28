@@ -611,4 +611,26 @@ router.post('/userdetails',async (req, res) => {
         })
     }
 })
+
+router.post('/verify/pin',async (req, res) => {
+    try {
+        let Collect= req.body
+
+        //getEmail
+        let userEmail= req.query.email
+
+        Collect.pin= /^\d{4}$/.test(Collect.pin)?await bcrypt.hashSync(`${Collect.pin}`, 10):null
+
+        await UserModel.findOneAndUpdate({email:userEmail,email_verif:true, phone_number_verif:true, pin:'null'},{pin:Collect.pin})
+
+        res.json({Access:true,Error:false, updated:true})
+
+    } catch (error) {
+        res.status(400).json({
+            Access:true,
+            Error:Errordisplay(error).msg
+        })
+    }
+})
+
 module.exports=router

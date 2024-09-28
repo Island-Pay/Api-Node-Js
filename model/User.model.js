@@ -42,7 +42,8 @@ const UserSchema = new Schema({
     },
     pin:{
         type: String,
-        required: [true, "pin is invalid"]
+        required: [true, "pin is invalid"],
+        default:'null'
     },
     userDetails_verify:{
         type: Boolean,

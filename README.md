@@ -310,6 +310,40 @@ try{
 
 ---
 
+### Register 5 pin (POST) -- /register/verify/pin?email=joe@doe.com
+
+> This is the route to register user details
+
+**Query**
+
+```
+  {
+    email: string
+  }
+```
+
+
+**Inputs**
+
+```
+  {
+    'pin': String
+  }
+```
+
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "updated": true
+  }
+```
+
+---
+
 ### Login (POST) -- /login
 
 > This is the route to login
@@ -577,7 +611,7 @@ try{
 
 router.get('/',VerifyJWTToken,async (req, res) => {
 
-## Walet Details 
+## Wallet Details 
 
 > This is where you get wallet details
 
@@ -634,35 +668,3 @@ router.get('/',VerifyJWTToken,async (req, res) => {
 ```
 
 ---
-
-### convert money (POST) -- /convert/convert
-> This is the route to convert the money.
-
-**Input**
-
-```
-  {
-    from: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP",
-    to: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP",
-    pin:String,
-    amount:Number
-  }
-```
->This is the customer desire currency to convert money from and to.
-
-
->reciever: This is reciever username
-
-**Output**
-
-```
-  {
-    "Access": true,
-    "Error": false/Error,
-    "Converted": true
-  }
-```
-
----
-
-router.get('/',VerifyJWTToken,async (req, res) => {
