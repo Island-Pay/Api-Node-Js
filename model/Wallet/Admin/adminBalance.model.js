@@ -15,7 +15,39 @@ const AdminBalanceSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default:0
-    }
+    },
+    Ngn:{
+        type:Number,
+        default:0
+    },
+    Usd:{
+        type:Number,
+        default:0
+    },
+    Kes:{
+        type:Number,
+        default:0
+    },
+    Zar:{
+        type:Number,
+        default:0
+    },
+    Ghs:{
+        type:Number,
+        default:0
+    },
+    Xof:{
+        type:Number,
+        default:0
+    },
+    Xaf:{
+        type:Number,
+        default:0
+    },
+    Gbp:{
+        type:Number,
+        default:0
+    },
 }, { timestamps: true });
 
 module.exports = mongoose.model('AdminBalance_model', AdminBalanceSchema);

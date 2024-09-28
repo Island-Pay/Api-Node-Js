@@ -1,8 +1,8 @@
 # IslandPay API Docs
 
-**Demo Api Link:** [https://buzzy-ng-api.onrender.com](https://buzzy-ng-api.onrender.com)
+**Demo Api Link:** [https://island-pay-private-api.onrender.com](https://island-pay-private-api.onrender.com)
 
-**Live Link:** [https://api.buzzy.ng](https://api.buzzy.ng)
+**Live Link:** [https://island-pay-private-api.onrender.com](https://island-pay-private-api.onrender.com)
 
 ## API Tutorial
 
@@ -115,7 +115,8 @@ try{
     email: string,
     phone_number: number,
     country: string,
-    password: string
+    password: string,
+    pin: Number // 4 digit pin
   }
 ```
 
@@ -246,7 +247,7 @@ try{
 ```
   {
     userPhoneNo:Number
-    OTP:String
+    OTP:Number
   }
 ```
 
@@ -454,6 +455,57 @@ try{
     "Access": true,
     "Error": false/Error,
     "RedirectURl": String
+  }
+```
+
+---
+
+## Send money 
+
+> This is where all auth route like login, register and all
+
+---
+
+### Send through IslandPay (POST) -- /sendmoney?currency=NGN
+
+> This is the route to send money to fellow island pay users.
+
+**Query**
+
+```
+  {
+    currency: "NGN" | "USD" | "KES" | "ZAR" | "GHS" | "XOF" | "XAF" | "GBP" 
+  }
+```
+>This is the customer desire currency to send money to.
+
+**Inputs**
+
+```
+  {
+    amount:Number,
+    reciever: String,
+    pin:Number
+  }
+```
+>reciever: This is reciever username
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Transaction": {
+      "amount":Number,
+      "charges":Number,
+      "type":String,
+      "naration":String,
+      "from":String,
+      "to":String,
+      "process":String,
+      "createdAt": NativeDate
+    }
   }
 ```
 

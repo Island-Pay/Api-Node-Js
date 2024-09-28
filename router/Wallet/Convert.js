@@ -10,18 +10,29 @@ const TemporaryDepositModel = require('../../model/Wallet/User/TemporaryDeposit.
 const router= require('express').Router()
 
 
-router.post('/',VerifyJWTToken,async (req, res) => {
+router.get('/rate',VerifyJWTToken,async (req, res) => {
     try {
 
-        let currency= req.query.currency
+        let Sendingcurrency= req.query.sending_currency
+        let Recievingcurrency= req.query.recieving_currency
 
-        if (currency!='NGN'&&currency!='KES'&&currency!='GHS'&&currency!='USD')return res.status(400).json({
+        if (Sendingcurrency!='NGN'&&Sendingcurrency!='USD')return res.status(400).json({
             Access:true,
-            Error:'Invalid currency.'
+            Error:'Invalid sending currency.'
+        })
+        if (Recievingcurrency!='NGN'&&Recievingcurrency!='USD')return res.status(400).json({
+            Access:true,
+            Error:'Invalid recieving currency.'
         }) 
         
+        //check if send and recieve the same
+        if (RecievingcurrencyRecievingcurrency)return res.status(400).json({
+            Access:true,
+            Error:'Cant have the same currency for sender and reciever.'
+        }) 
+
         //get data
-        let amount= req.body.amount
+        let amount= req.query.amount
         // amount,narration
 
         //deleting old temporary deposit

@@ -18,7 +18,6 @@ router.post('/', async (req, res, next) => {
 
     try {
         
-        
         // Continue with the request functionality
         let response= req.body
 
@@ -29,7 +28,7 @@ router.post('/', async (req, res, next) => {
 
             // ['NGN', 'KES', 'GHS', 'USD']
             //updating user wallet
-            await UserWalletModel.updateOne({user_id:TempTransasction.user_id},{$in:{
+            await UserWalletModel.updateOne({user_id:TempTransasction.user_id},{$inc:{
               ...data.currency=='NGN'?{Ngn:data.amount}:{},
               ...data.currency=='KES'?{Kes:data.amount}:{},
               ...data.currency=='GHS'?{Ghs:data.amount}:{},
@@ -166,11 +165,11 @@ router.post('/', async (req, res, next) => {
                         <ul style="line-height: 1.8; color: #333;">
                             <li><strong>Amount:</strong> ${data.amount}</li>
                             <li><strong>Currency:</strong> ${data.currency}</li>
-                            <li><strong>Date:</strong> ${Date.now()}</li>
-                            <li><strong>Transaction ID:</strong> ${transaction._id}</li>
+                            <li><strong>Date:</strong> ${new Date().toLocaleString()}</li>
+                            <li><strong>Transaction ID:</strong> ${transaction[0]._id}</li>
                         </ul>
                         <p>
-                            You can view your updated balance and transaction history by clicking the button below:
+                            You can view your updated balance and transaction history by viewing the app.
                         </p>
                         
                         <p>
@@ -190,6 +189,27 @@ router.post('/', async (req, res, next) => {
             `)
         
             return
+        }else if(response.event== 'charge.failed'){
+            let data= response.data
+
+            let TempTransasction= await TemporaryDepositModel.findOneAndDelete({_id:data.reference}).session(session)
+
+            //create transaction
+            await TransactionModel.create([{
+                user_id:TempTransasction.user_id,
+                amount:data.amount,
+                type:'Credit',
+                naration:`${data.currency} deposit`,
+                from:'CASH',
+                to:data.currency,
+                process:'Failed'
+            }],{session:session})
+
+            await session.commitTransaction();
+            session.endSession();
+
+            res.sendStatus(200)
+
         }
 
         await session.abortTransaction();
@@ -210,3 +230,5 @@ router.post('/', async (req, res, next) => {
      return res.status(404).json({Access:false,Error:"Page not found"})
    }
 });
+
+module.exports=router

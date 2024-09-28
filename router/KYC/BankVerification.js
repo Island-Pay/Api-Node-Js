@@ -28,7 +28,7 @@ router.post('/',VerifyJWTToken,async (req, res) => {
         
         //intigration
         let intigration= await axios({
-            url:`${process.env.KoraApiLink}`,
+            url:`${process.env.KoraApiLink}/api/v1/identities/ng/bvn`,
             headers:{
                 Accept:'application/json',
                 'Content-Type':'application/json',

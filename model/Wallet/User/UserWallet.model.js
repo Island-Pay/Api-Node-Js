@@ -26,11 +26,11 @@ const UserWallet = new mongoose.Schema({
         type:Number,
         default:0
     },
-    Kof:{
+    Xof:{
         type:Number,
         default:0
     },
-    Kaf:{
+    Xaf:{
         type:Number,
         default:0
     },

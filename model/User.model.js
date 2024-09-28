@@ -40,6 +40,10 @@ const UserSchema = new Schema({
         type: String,
         required: [true, "password is invalid"]
     },
+    pin:{
+        type: String,
+        required: [true, "pin is invalid"]
+    },
     userDetails_verify:{
         type: Boolean,
         default:false

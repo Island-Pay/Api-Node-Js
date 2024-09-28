@@ -19,6 +19,9 @@ router.post('/1',async (req, res) => {
         const hashPwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(Collect.password)?await bcrypt.hashSync(Collect.password, 10):null
         Collect.password=hashPwd
 
+        //hash pin
+        Collect.pin= /^\d{4}$/.test(Collect.pin)?await bcrypt.hashSync(`${Collect.pin}`, 10):null
+
         // if not nigerian verify id
         if(Collect.country!="Nigeria")Collect.bank_verif==true;
 
