@@ -4,6 +4,18 @@ const AuthModel = require("../model/Auth.model");
 
 const crypto = require('crypto');
 
+function encryptAES256(encryptionKey, paymentData) {  
+  const iv = crypto.randomBytes(16);
+
+  const cipher = crypto.createCipheriv('aes-256-gcm', encryptionKey, iv);
+  const encrypted = cipher.update(paymentData);
+
+  const ivToHex = iv.toString('hex');
+  const encryptedToHex = Buffer.concat([encrypted, cipher.final()]).toString('hex');
+  
+  return `${ivToHex}:${encryptedToHex}:${cipher.getAuthTag().toString('hex')}`;
+}
+
 function createHash(jsonBody, apiKey) {
   // Convert JSON body to string
   const jsonString = JSON.stringify(jsonBody);
@@ -102,4 +114,4 @@ function VerifyWebJWTToken(req, res, next) {
     });
 }
 
-module.exports= {Errordisplay, CreateJWTToken, VerifyJWTToken,VerifyWebJWTToken, createHash}
+module.exports= {encryptAES256, Errordisplay, CreateJWTToken, VerifyJWTToken,VerifyWebJWTToken, createHash}

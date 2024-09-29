@@ -13,7 +13,7 @@ const FailedTransactionSchema = new mongoose.Schema({
     reason: {
         type: String,
         required: true,
-        enum: ['insufficient funds', 'network error', 'card declined', 'limit exceeded', 'other']
+        enum: ['insufficient funds', 'network error', 'card declined', 'limit exceeded', 'withdrawal']
     },
     amount: {
         type: Number,
@@ -31,9 +31,6 @@ const FailedTransactionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    ip_address: {
-        type: String  // Captures the IP address for extra security/audit
-    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('FailedTransaction_model', FailedTransactionSchema);

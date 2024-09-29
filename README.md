@@ -717,7 +717,7 @@ router.get('/',VerifyJWTToken,async (req, res) => {
 
 ---
 
-### get Banks (GET) -- /payout/get-banks?Country=NG
+### get Banks (GET) -- /payout/get-banks?country=NG
 > This is the route to get fulllist of banks for a country.
 
 **Headers**
@@ -757,7 +757,7 @@ router.get('/',VerifyJWTToken,async (req, res) => {
 
 ---
 
-### get Mobile money (GET) -- /payout/get-mobileMoney?Country=GH
+### get Mobile money (GET) -- /payout/get-mobileMoney?country=GH
 > This is the route to get full list of mobile money for a country.
 
 **Headers**
@@ -800,8 +800,8 @@ router.get('/',VerifyJWTToken,async (req, res) => {
 ---
 
 
-### get resolve bank (GET) -- /payout/get-mobileMoney?Country=GH
-> This is the route to get full list of mobile money for a country.
+### get resolve mobile money (post) -- /payout/resolve-mobileMoney?country=GH
+> This is the route to bank detals.
 
 **Headers**
 
@@ -816,10 +816,20 @@ router.get('/',VerifyJWTToken,async (req, res) => {
 
 ```
   {
-    country: country: "NG" | "KE" | "ZA" | "US" | "GB"
+    country: "GHS" | "KES" | "XOF" | 'XAF',
   }
 ```
->Country you wanna withdraw to
+>Country you wanna withdraw to.
+
+**Inputs**
+
+```
+  {
+    mobileMoneyCode:String,
+    phoneNumber:String,
+  }
+```
+>***bank:*** This is bank code
 
 **Output**
 
@@ -827,16 +837,139 @@ router.get('/',VerifyJWTToken,async (req, res) => {
   {
     "Access": true,
     "Error": false/Error,
-    "Banks":[
-    {
-      "name": " Mobile money operator name", // e.g Safaricom
-      "slug": " Mobile money operator slug", // e.g safaricom-ke
-      "code": " Mobile Money code", // e.g 0001
-      "country": "KE",
-      "min":  10,
-      "max": 70000
-    },
-  ]
+    "Banks":{
+      "mobile_money_operator": "MTN GH",
+      "mobile_money_code": "0004",
+      "phone_number": "233722222222",
+      "account_name": "EBUKA CIROMA OLADEMJI"
+    }
+  }
+```
+
+---
+
+### get resolve bank (post) -- /payout/resolve-bank?country=GH
+> This is the route to bank detals.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
+**Query**
+
+```
+  {
+    country: "NGN" | "KES" | "ZAR" | "USD" | "GBP"
+  }
+```
+>Country you wanna withdraw to
+
+**Inputs**
+
+```
+  {
+    bank:String,
+    account:String,
+  }
+```
+>***bank:*** This is bank code
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Banks":{
+      "bank_name": "United Bank for Africa",
+      "bank_code": "033",
+      "account_number": "2158634852",
+      "account_name": "EBUKA CIROMA OLADEMJI"
+    }
+  }
+```
+
+---
+
+### payout to bank (post) -- /payout/bank/disburse
+> This is the route to bank detals.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
+
+**Inputs**
+
+```
+  {
+    bankCode:String,
+    account:String,
+    pin:String,
+    amount: Number,
+    currency: "NGN" | "KES" | "ZAR" | "USD" | "GBP",
+    narration: String,
+    accountName:String
+  }
+```
+>***bank:*** This is bank code
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Sent": true
+  }
+```
+
+---
+
+### payout to Mobile Money (post) -- /payout/mobilemoney/disburse
+> This is the route to bank detals.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
+
+**Inputs**
+
+```
+  {
+    mobileMoneySlug:String,
+    account:String,
+    pin:String,
+    amount: Number,
+    currency: "GHS" | "KES" | "XOF" | 'XAF',
+    narration: String,
+  }
+```
+>***mobileMoneySlug:*** the mobile money operator slug, eg. safaricom-ke.
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Sent": true
   }
 ```
 
