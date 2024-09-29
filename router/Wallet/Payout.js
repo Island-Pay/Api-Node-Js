@@ -97,21 +97,21 @@ router.get('/get-mobileMoney',VerifyJWTToken,async (req, res) => {
 })
 
 
-//verify resolve
+//verify resolve bank
 router.post('/resolve-bank',VerifyJWTToken,async (req, res) => {
     try {
 
         //banks
         let Country= req.query.country
 
-        let {amount,bank}=req.body;
+        let {account,bank}=req.body;
 
         //validate Banks
         const excludedCurrencies = ["GH","KE","CI",'CM'];
         if (!excludedCurrencies.includes(Country)) {
             return res.status(400).json({
             Access:true,
-            Error:'Invalid currency.'
+            Error:'Invalid Country.'
         }) }
 
         let Intigration= (await axios({
@@ -123,7 +123,54 @@ router.post('/resolve-bank',VerifyJWTToken,async (req, res) => {
                 Authorization:`Bearer ${process.env.KoraPublicKey}`
             },
             data:JSON.stringify({
-                bank, amount, currency:Country
+                bank, account, currency:Country
+            })
+        })).data.data
+
+        res.json({Access:true,Error:false, Details:Intigration})
+    } catch (error) {
+        if (error.isAxiosError) {
+            // Axios specific error handling
+            return res.status(400).json({
+                Access: false,
+                Error: error.response ? error.response.data?.message : 'Axios API error'
+            });
+        }
+
+        res.status(400).json({
+            Access:true,
+            Error:Errordisplay(error).msg
+        })
+    }
+})
+
+//verify resolve
+router.post('/resolve-mobileMoney',VerifyJWTToken,async (req, res) => {
+    try {
+
+        //banks
+        let Country= req.query.country
+
+        let {mobileMoneyCode,phoneNumber}=req.body;
+
+        //validate Banks
+        const excludedCurrencies = ["GH","KE","CI",'CM'];
+        if (!excludedCurrencies.includes(Country)) {
+            return res.status(400).json({
+            Access:true,
+            Error:'Invalid currency.'
+        }) }
+
+        let Intigration= (await axios({
+            url:`${process.env.KoraApiLink}/api/v1/misc/mobile-money/resolve`,
+            method:'post',
+            headers:{
+                Accept:'application/json',
+                'Content-Type':'application/json',
+                Authorization:`Bearer ${process.env.KoraPublicKey}`
+            },
+            data:JSON.stringify({
+                mobileMoneyCode, phoneNumber, currency:Country
             })
         })).data.data
 
