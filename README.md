@@ -465,6 +465,15 @@ try{
 
 > This is the route to get deposit link.
 
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
 **Query**
 
 ```
@@ -503,6 +512,15 @@ try{
 ### Send through IslandPay (POST) -- /sendmoney?currency=NGN
 
 > This is the route to send money to fellow island pay users.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
 
 **Query**
 
@@ -554,6 +572,15 @@ try{
 ### get rate (GET) -- /convert/get-rate?from=USD&to=NGN
 > This is the route to get rate.
 
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
 **Query**
 
 ```
@@ -581,6 +608,15 @@ try{
 
 ### convert money (POST) -- /convert/convert
 > This is the route to convert the money.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
 
 **Input**
 
@@ -620,8 +656,14 @@ router.get('/',VerifyJWTToken,async (req, res) => {
 ### get details (GET) -- /wallet/details
 > This is the route to get full wallet details.
 
+**Headers**
 
->reciever: This is reciever username
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
 
 **Output**
 
@@ -664,6 +706,94 @@ router.get('/',VerifyJWTToken,async (req, res) => {
         }
       ]
     }
+  }
+```
+
+---
+
+## Wallet Payout 
+
+> This is where you withdraw your funds
+
+---
+
+### get Banks (GET) -- /payout/get-banks?Country=NG
+> This is the route to get fulllist of banks for a country.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
+**Query**
+
+```
+  {
+    country: "NG" | "KE" | "ZA" | "US" | "GB",
+  }
+```
+>Country you wanna withdraw to
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Banks":[
+      {
+        "name": " Bank name", // e.g Access Bank Nigeria
+        "slug": " Bank slug", // e.g access
+        "code": " Bank code", // e.g 044
+        "country": "NG"
+      },
+    ]
+  }
+```
+
+---
+
+### get Mobile money (GET) -- /payout/get-mobileMoney?Country=GH
+> This is the route to get full list of mobile money for a country.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
+**Query**
+
+```
+  {
+    country: "GH" | "KE" | "CI" | 'CM',
+  }
+```
+>Country you wanna withdraw to
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Banks":[
+    {
+      "name": " Mobile money operator name", // e.g Safaricom
+      "slug": " Mobile money operator slug", // e.g safaricom-ke
+      "code": " Mobile Money code", // e.g 0001
+      "country": "KE",
+      "min":  10,
+      "max": 70000
+    },
+  ]
   }
 ```
 

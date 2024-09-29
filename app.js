@@ -60,3 +60,4 @@ app.use('/webhook',require('./router/Wallet/Webhook'))//webhook routes
 app.use('/sendmoney',require('./router/Wallet/SendMoneyInit'))//send money routes
 app.use('/convert',require('./router/Wallet/Convert'))//convert money routes
 app.use('/wallet/details',require('./router/Wallet/Details'))//wallet details money routes
+app.use('/payout',require('./router/Wallet/Payout'))//send to other banks routes
