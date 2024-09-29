@@ -55,7 +55,7 @@ const UserSchema = new Schema({
     },
     phone_number_verif:{
         type: Boolean,
-        default:false
+        default:true
     },
     kyc:{
         type: Boolean,
