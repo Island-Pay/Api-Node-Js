@@ -798,3 +798,46 @@ router.get('/',VerifyJWTToken,async (req, res) => {
 ```
 
 ---
+
+
+### get resolve bank (GET) -- /payout/get-mobileMoney?Country=GH
+> This is the route to get full list of mobile money for a country.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
+**Query**
+
+```
+  {
+    country: country: "NG" | "KE" | "ZA" | "US" | "GB"
+  }
+```
+>Country you wanna withdraw to
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Banks":[
+    {
+      "name": " Mobile money operator name", // e.g Safaricom
+      "slug": " Mobile money operator slug", // e.g safaricom-ke
+      "code": " Mobile Money code", // e.g 0001
+      "country": "KE",
+      "min":  10,
+      "max": 70000
+    },
+  ]
+  }
+```
+
+---
