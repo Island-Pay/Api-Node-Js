@@ -368,7 +368,8 @@ try{
           "step1": boolean,
           "emailVerify": boolean,
           "phoneNoVerify": boolean,
-          "UserDetails": boolean
+          "UserDetails": boolean,
+          "pinVerify":boolean,
         },
 
         "BasicVerification":Boolean,
@@ -647,13 +648,13 @@ try{
 
 router.get('/',VerifyJWTToken,async (req, res) => {
 
-## Wallet Details 
+## Wallet/User Details 
 
 > This is where you get wallet details
 
 ---
 
-### get details (GET) -- /wallet/details
+### get wallet details (GET) -- /wallet/details
 > This is the route to get full wallet details.
 
 **Headers**
@@ -705,6 +706,49 @@ router.get('/',VerifyJWTToken,async (req, res) => {
           status: "active" | ... 1 more ... | "blocked";
         }
       ]
+    }
+  }
+```
+
+---
+
+
+### get User details (GET) -- /user/details
+> This is the route to get full wallet details.
+
+**Headers**
+
+```
+  {
+    ...
+    Authorization:'Bearer auth'
+  }
+```
+
+**Output**
+
+```
+  {
+    "Access": true,
+    "Error": false/Error,
+    "Data": {
+      "User":{
+        "firstName": string,
+        "lastName": string,
+        "username": string,
+        "email": string,
+        "phone_number": number,
+        "country": string,
+        "Referral": string
+      },
+      "Details":{
+        'dateOfBirth': NativeDate,
+        'address': string,
+        'city': string,
+        'state': string,
+        'country': string,
+        'zipCode': string
+      }
     }
   }
 ```

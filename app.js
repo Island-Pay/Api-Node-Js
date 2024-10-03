@@ -53,6 +53,7 @@ mongoose.connect(process.env.mongoUri)
 app.use('/register',require('./router/Auths/Register'))//register routes
 app.use('/login',require('./router/Auths/Logins'))//Login routes
 app.use('/forgotpassword',require('./router/Auths/forgotPassword'))//Login routes
+app.use('/user/details',require('./router/Auths/forgotPassword'))//Login routes
 
 /////////////Wallet//////////////
 app.use('/deposit',require('./router/Wallet/Deposit'))//deposit routes

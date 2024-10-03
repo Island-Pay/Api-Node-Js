@@ -49,7 +49,8 @@ router.post('/',async (req, res) => {
                 step1:true,
                 emailVerify:User.email_verif,
                 phoneNoVerify:User.phone_number_verif,
-                UserDetails:User.userDetails_verify
+                UserDetails:User.userDetails_verify,
+                pinVerify:User.pin!='null'?true:false
             },
 
             BasicVerification:User.email_verif==true&&User.phone_number_verif,
