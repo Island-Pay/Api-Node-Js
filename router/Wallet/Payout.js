@@ -387,7 +387,7 @@ router.post('/bank/disburse',VerifyJWTToken,async (req, res) => {
                     bank_account:{
                         bank:bankCode,
                         account,
-                        account_name:accountName
+                        ...currency=='ZAR'?{account_name:accountName}:null
                     },
                     customer:{
                         name:req.user.username,
@@ -407,7 +407,9 @@ router.post('/bank/disburse',VerifyJWTToken,async (req, res) => {
         
         if (error.isAxiosError) {
             // Axios specific error handling
-
+            console.log('====================================');
+            console.log(error.response.data);
+            console.log('====================================');
             await failedTransactionModel.create({
                 user_id:req.user._id,
                 transaction_id:transaID,
