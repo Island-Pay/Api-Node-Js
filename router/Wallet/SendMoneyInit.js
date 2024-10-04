@@ -58,7 +58,7 @@ router.post('/',VerifyJWTToken,async (req, res) => {
         //get reciever details
         let RecieverDetails= await UserModel.findOne({username:reciever, email_verif:true,phone_number_verif:true,userDetails_verify:true})
 
-        if(RecieverDetails==null||RecieverDetails==undefined){
+        if(!RecieverDetails){
             await session.abortTransaction();
             session.endSession(); 
             return res.status(400).json({
