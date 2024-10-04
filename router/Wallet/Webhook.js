@@ -221,7 +221,7 @@ router.post('/', async (req, res, next) => {
             let earning=TempTransasction.charges-data.fee
 
             // updating admin
-            await adminBalanceModel.updateOne({user_id:req.user._id},{
+            await adminBalanceModel.updateOne({user_id:TempTransasction.user_id},{
                 $inc:{
 
                     // earning
@@ -397,16 +397,16 @@ router.post('/', async (req, res, next) => {
 
             let totaReverse= TempTransasction.amount+TempTransasction.charges
 
-            await UserWalletModel.updateOne({user_id:req.user._id},{
+            await UserWalletModel.updateOne({user_id:TempTransasction.user_id},{
                 $inc:{
-                    ...currency== "NGN" ? { Ngn: totaReverse } : {},
-                    ...currency== "USD" ? { Usd: totaReverse } : {},
-                    ...currency== "KES" ? { Kes: totaReverse } : {},
-                    ...currency== "ZAR" ? { Zar: totaReverse } : {},
-                    ...currency== "GHS" ? { Ghs: totaReverse } : {},
-                    ...currency== "XOF" ? { Xof: totaReverse } : {},
-                    ...currency== "XAF" ? { Xaf: totaReverse } : {},
-                    ...currency== "GBP" ? { Gbp: totaReverse } : {},
+                    ...data.currency== "NGN" ? { Ngn: totaReverse } : {},
+                    ...data.currency== "USD" ? { Usd: totaReverse } : {},
+                    ...data.currency== "KES" ? { Kes: totaReverse } : {},
+                    ...data.currency== "ZAR" ? { Zar: totaReverse } : {},
+                    ...data.currency== "GHS" ? { Ghs: totaReverse } : {},
+                    ...data.currency== "XOF" ? { Xof: totaReverse } : {},
+                    ...data.currency== "XAF" ? { Xaf: totaReverse } : {},
+                    ...data.currency== "GBP" ? { Gbp: totaReverse } : {},
     
                 }            
             }).session(session)
